@@ -1,4 +1,4 @@
-name: Version Manager
+name: Version & Release Manager
 
 on:
   push:
@@ -9,8 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  version:
-    if: contains(github.event.head_commit.message, '[build]')
+  release:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,33 +18,138 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Read version from package.json
-        id: version
+      # --------------------------------------------------
+      # Detect last tag
+      # --------------------------------------------------
+      - name: Get last tag
+        id: last_tag
         run: |
-          VERSION=$(node -p "require('./package.json').version")
+          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          echo "LAST_TAG=${TAG#v}" >> $GITHUB_ENV
+          echo "⬅️ Laatste versie: ${TAG#v}"
 
-          if [ -z "$VERSION" ]; then
-            echo "❌ Geen versie gevonden in package.json"
-            exit 1
-          fi
-
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "📦 Versie gevonden: $VERSION"
-
-      - name: Check if git tag already exists
+      # --------------------------------------------------
+      # Collect commits
+      # --------------------------------------------------
+      - name: Collect commits
+        id: commits
         run: |
-          TAG="v$VERSION"
-
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
-            echo "❌ Tag $TAG bestaat al"
-            exit 1
+          if [ -z "$LAST_TAG" ]; then
+            RANGE="HEAD"
           else
-            echo "✅ Tag $TAG bestaat nog niet"
+            RANGE="v$LAST_TAG..HEAD"
           fi
 
+          COMMITS=$(git log $RANGE --pretty=format:"%s")
+          COUNT=$(git rev-list --count $RANGE)
+
+          echo "COMMITS_COUNT=$COUNT" >> $GITHUB_ENV
+          echo "COMMITS<<EOF" >> $GITHUB_ENV
+          echo "$COMMITS" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+          echo "🔢 Commits gevonden: $COUNT"
+
+      # --------------------------------------------------
+      # Stop if no code changes
+      # --------------------------------------------------
+      - name: Stop if no commits
+        if: env.COMMITS_COUNT == '0'
+        run: |
+          echo "⏭️ Geen nieuwe commits, release wordt overgeslagen"
+          exit 0
+
+      # --------------------------------------------------
+      # Determine version bump (Conventional Commits)
+      # --------------------------------------------------
+      - name: Determine version bump
+        id: bump
+        run: |
+          BUMP="patch"
+
+          if echo "$COMMITS" | grep -q "BREAKING CHANGE"; then
+            BUMP="major"
+          elif echo "$COMMITS" | grep -q "^feat"; then
+            BUMP="minor"
+          elif echo "$COMMITS" | grep -q "^fix\|^chore"; then
+            BUMP="patch"
+          else
+            echo "⏭️ Geen relevante conventional commits gevonden"
+            exit 0
+          fi
+
+          echo "BUMP=$BUMP" >> $GITHUB_ENV
+          echo "📈 Version bump: $BUMP"
+
+      # --------------------------------------------------
+      # Bump version in package.json
+      # --------------------------------------------------
+      - name: Bump package.json version
+        run: |
+          npm version $BUMP --no-git-tag-version
+          VERSION=$(node -p "require('./package.json').version")
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "📦 Nieuwe versie: $VERSION"
+
+      # --------------------------------------------------
+      # Commit version bump
+      # --------------------------------------------------
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add package.json
+          git commit -m "chore(release): v$VERSION"
+          git push
+
+      # --------------------------------------------------
+      # Create build artifact
+      # --------------------------------------------------
+      - name: Create release archive
+        run: |
+          zip -r build-v$VERSION.zip . \
+            -x ".git/*" "node_modules/*"
+
+      # --------------------------------------------------
+      # Generate grouped changelog
+      # --------------------------------------------------
+      - name: Generate changelog
+        run: |
+          FEAT=$(echo "$COMMITS" | grep "^feat" || true)
+          FIX=$(echo "$COMMITS" | grep "^fix" || true)
+          CHORE=$(echo "$COMMITS" | grep "^chore" || true)
+
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "### ✨ Features" >> $GITHUB_ENV
+          echo "$FEAT" >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "### 🐛 Fixes" >> $GITHUB_ENV
+          echo "$FIX" >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
+          echo "### 🧹 Chores" >> $GITHUB_ENV
+          echo "$CHORE" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      # --------------------------------------------------
+      # Create git tag
+      # --------------------------------------------------
       - name: Create git tag
         run: |
-          TAG="v$VERSION"
-          git tag "$TAG"
-          git push origin "$TAG"
-          echo "🚀 Versie $TAG is getagd en vastgezet"
+          git tag "v$VERSION"
+          git push origin "v$VERSION"
+
+      # --------------------------------------------------
+      # Create GitHub Release
+      # --------------------------------------------------
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: v${{ env.VERSION }}
+          body: |
+            📦 **Versie:** ${{ env.VERSION }}
+            🔢 **Commits:** ${{ env.COMMITS_COUNT }}
+
+            ${{ env.CHANGELOG }}
+          files: |
+            build-v${{ env.VERSION }}.zip

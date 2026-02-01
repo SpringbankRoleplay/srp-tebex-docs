@@ -1,6 +1,8 @@
-name: Manual Deployer
+name: Deployer
 
 on:
+  push:
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -14,6 +16,7 @@ concurrency:
 
 jobs:
   build:
+    if: contains(github.event.head_commit.message, '[build]')
     runs-on: ubuntu-latest
 
     steps:
@@ -21,11 +24,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Read version from package.json
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "📦 Handmatige deploy van versie $VERSION"
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -39,9 +37,12 @@ jobs:
           elif [ -f "yarn.lock" ]; then
             echo "manager=yarn" >> $GITHUB_OUTPUT
             echo "runner=yarn" >> $GITHUB_OUTPUT
-          else
+          elif [ -f "package.json" ]; then
             echo "manager=npm" >> $GITHUB_OUTPUT
             echo "runner=npm" >> $GITHUB_OUTPUT
+          else
+            echo "No package manager found"
+            exit 1
           fi
 
       - name: Setup Node
@@ -65,6 +66,7 @@ jobs:
           path: ./out
 
   deploy:
+    if: contains(github.event.head_commit.message, '[build]')
     runs-on: ubuntu-latest
     needs: build
 
