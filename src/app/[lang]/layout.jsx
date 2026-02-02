@@ -4,8 +4,11 @@ import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
  
 export const metadata = {
-  // Define your metadata here
-  // For more information on metadata API, see: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
+    title: 'SRP Scripts Documentation',
+    description: 'Documentation for the SRP Script.',
+    icons: {
+      icon: '/favicon.ico',
+    },
 }
  
 // const banner = <Banner storageKey="some-key">Nextra 4.0 is released 🎉</Banner>
@@ -19,11 +22,15 @@ const navbar = (
 )
 const footer = <Footer>{new Date().getFullYear()} © Springbank.</Footer>
  
-export default async function RootLayout({ children }) {
+export default async function RootLayout({ children, params }) {
+  let { lang } = await params
+  if (!lang) lang = 'en'
+  const pageMap = await getPageMap(`/${lang}`)
+
   return (
     <html
       // Not required, but good for SEO
-      lang="en"
+      lang={lang}
       // Required to be set
       dir="ltr"
       // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
@@ -37,11 +44,19 @@ export default async function RootLayout({ children }) {
       <body>
         <Layout
           // banner={banner}
+          toc={{
+            float: true,
+            title: lang === 'en' ? 'On this page' : 'Op deze pagina'
+          }}
           navbar={navbar}
-          pageMap={await getPageMap()}
+          pageMap={pageMap}
           docsRepositoryBase="https://github.com/springbank/"
           footer={footer}
           // ... Your additional layout options
+          i18n={[
+            { locale: 'en', name: 'English' },
+            { locale: 'nl', name: 'Nederlands' }
+          ]}
         >
           {children}
         </Layout>
