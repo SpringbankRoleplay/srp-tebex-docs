@@ -56,6 +56,9 @@ jobs:
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} run build
 
+      - name: Copy CNAME to output directory
+        run: cp CNAME out/CNAME
+
       - name: Postbuild
         run: npm run postbuild
 

@@ -11,8 +11,8 @@ export default withNextra({
     images: {
         unoptimized: true,
     },
-    basePath: '/srp-tebex-docs',
-    assetPrefix: '/srp-tebex-docs'
+    trailingSlash: true,
+    // No basePath or assetPrefix needed for custom domain
     // turbopack: {
     //     resolveAlias: {
     //         'next-mdx-import-source-file': './src/mdx-components.tsx'
