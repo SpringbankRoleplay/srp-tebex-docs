@@ -9,8 +9,10 @@ const withNextra = nextra({
 export default withNextra({
     output: 'export',
     images: {
-        unoptimized: false,
+        unoptimized: true,
     },
+    basePath: '/srp-tebex-docs',
+    assetPrefix: '/srp-tebex-docs'
     // turbopack: {
     //     resolveAlias: {
     //         'next-mdx-import-source-file': './src/mdx-components.tsx'
