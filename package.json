@@ -17,8 +17,7 @@
     "devturbo": "next --turbopack",
     "serv": "serve out",
     "build": "next build",
-    "start": "next start",
-    "postbuild": "pagefind --site .next/server/app --output-path out/_pagefind"
+    "postbuild": "touch out/.nojekyll && pagefind --site out"
   },
   "dependencies": {
     "next": "^16.1.6",
