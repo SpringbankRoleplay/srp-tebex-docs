@@ -57,11 +57,27 @@ jobs:
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} run build
 
+      - name: Create .nojekyll file
+        run: touch out/.nojekyll
+
       - name: Copy CNAME to output directory
         run: cp CNAME out/CNAME
 
-      - name: Postbuild
-        run: npm run postbuild
+      - name: Run Pagefind
+        run: npx pagefind --site out
+
+      - name: List output directory contents
+        run: |
+          echo "Contents of out directory:"
+          ls -la out/
+          echo "Checking for index.html:"
+          if [ -f "out/index.html" ]; then
+            echo "✅ index.html found!"
+            head -n 20 out/index.html
+          else
+            echo "❌ index.html NOT found!"
+            exit 1
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
