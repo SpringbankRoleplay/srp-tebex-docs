@@ -3,16 +3,6 @@ name: Deployer
 on:
   push:
     branches: ["main"]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 jobs:
   build:
@@ -24,56 +14,24 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Detect package manager
-        id: detect-package-manager
+      - name: Install Bun
         run: |
-          if [ -f "pnpm-lock.yaml" ]; then
-            echo "manager=pnpm" >> $GITHUB_OUTPUT
-            echo "runner=pnpm" >> $GITHUB_OUTPUT
-          elif [ -f "yarn.lock" ]; then
-            echo "manager=yarn" >> $GITHUB_OUTPUT
-            echo "runner=yarn" >> $GITHUB_OUTPUT
-          else
-            echo "manager=npm" >> $GITHUB_OUTPUT
-            echo "runner=npm" >> $GITHUB_OUTPUT
-          fi
+          curl -fsSL https://bun.sh/install | bash
+          echo "BUN_INSTALL=$HOME/.bun" >> $GITHUB_ENV
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+          bun --version
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
-
-      - name: Install dependencies
-        run: ${{ steps.detect-package-manager.outputs.runner }} install
+      - name: Install dependencies with Bun
+        run: bun install
 
       - name: Build with Next.js
-        run: ${{ steps.detect-package-manager.outputs.runner }} run build
-
-      - name: Create .nojekyll file
-        run: touch out/.nojekyll
+        run: bun run build
 
       - name: Copy CNAME to output directory
         run: cp CNAME out/CNAME
 
       - name: Run Pagefind
-        run: npx pagefind --site out
-
-      - name: Duplicate EN to root index.html #// beetje iligaal maar goed genoeg voor nu. (niet aankomen!!!)
-        run: |
-          if [ -f out/en.html ]; then
-            cp out/en.html out/index.html
-            echo "✅ Copied en.html → index.html"
-          elif [ -f out/en/index.html ]; then
-            cp out/en/index.html out/index.html
-            echo "✅ Copied en/index.html → index.html"
-          else
-            echo "❌ No EN entry file found"
-            exit 1
-          fi
+        run: bun run pagefind
 
       - name: List output directory contents
         run: |

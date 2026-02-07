@@ -1,48 +1,61 @@
+// Nextra
 import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import { Banner, Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
-import './global.css'
+
+// Next
 import Image from 'next/image'
- 
+import Link from "next/link";
+
+//Style
+import './globals.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStore } from '@fortawesome/free-solid-svg-icons'
+
 export const metadata = {
-    title: 'SRP Scripts Documentation',
-    description: 'Documentation for the SRP Script.',
-    icons: {
-      icon: '/favicon.ico',
-    },
+  // Define your metadata here
+  // For more information on metadata API, see: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
 }
- 
-const banner = <Banner storageKey="springbank-scripts-betarelease">Springbank - Scripts | Beta Release🎉</Banner>
+
+const banner = (
+  <Banner
+    storageKey="springbank-scripts-betarelease"
+    className="bg-blue-400"
+  >
+    Springbank - Scripts | Beta Release🎉
+  </Banner>
+)
+
 const navbar = (
   <Navbar
     logo={
       <span className="flex items-center gap-2">
-        <Image src="https://wetboek.srp-fivem.nl/img/logo.png" alt="Logo" width={45} height={45} />
+        <Image src="/logo.png" alt="Logo" width={45} height={45} />
         <h1 className="text-xl font-bold">
           SRP Scripts
         </h1>
       </span>
     }
-    logoLink="/en"
+    logoLink="/"
     chatLink="https://discord.gg/5H6kG8XAur"
     projectLink='https://github.com/SpringbankRoleplay/srp-tebex-docs'
-    
-    // ... Your additional navbar options 
+    children={
+      <span className="hidden md:flex items-center gap-2">
+        <Link href="/roleplay" passHref>
+          <FontAwesomeIcon icon={faStore} className="w-6 h-6" />
+        </Link>
+      </span>
+    }
   />
 )
 
-const footer = <Footer>{new Date().getFullYear()} © Springbank.</Footer>
- 
-export default async function RootLayout({ children, params }) {
-  let { lang } = await params
-  if (!lang) lang = 'en'
+const footer = <Footer>{new Date().getFullYear()} © SRP Gaming.</Footer>
 
-  const pageMap = await getPageMap(`/${lang}`)
-
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       // Not required, but good for SEO
-      lang={lang}
+      lang="en"
       // Required to be set
       dir="ltr"
       // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
@@ -57,14 +70,10 @@ export default async function RootLayout({ children, params }) {
         <Layout
           banner={banner}
           navbar={navbar}
-          pageMap={pageMap}
+          pageMap={await getPageMap()}
           docsRepositoryBase="https://github.com/SpringbankRoleplay/srp-tebex-docs/tree/main"
-          
           footer={footer}
-          i18n={[
-            { locale: 'en', name: 'English' },
-            { locale: 'nl', name: 'Nederlands' }
-          ]}
+          // ... Your additional layout options
         >
           {children}
         </Layout>
