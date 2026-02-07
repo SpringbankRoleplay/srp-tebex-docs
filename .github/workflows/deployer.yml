@@ -62,21 +62,18 @@ jobs:
       - name: Run Pagefind
         run: npx pagefind --site out
 
-      - name: Create root index.html redirect #// beetje iligaal maar goed genoeg voor nu. (niet aankomen!!!)
+      - name: Duplicate EN to root index.html #// beetje iligaal maar goed genoeg voor nu. (niet aankomen!!!)
         run: |
-          cat > out/index.html << 'EOF'
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <meta charset="utf-8" />
-              <meta http-equiv="refresh" content="0; url=./en" />
-              <link rel="canonical" href="./en" />
-            </head>
-            <body>
-              Redirecting to <a href="./en">/en</a>…
-            </body>
-          </html>
-          EOF
+          if [ -f out/en.html ]; then
+            cp out/en.html out/index.html
+            echo "✅ Copied en.html → index.html"
+          elif [ -f out/en/index.html ]; then
+            cp out/en/index.html out/index.html
+            echo "✅ Copied en/index.html → index.html"
+          else
+            echo "❌ No EN entry file found"
+            exit 1
+          fi
 
       - name: List output directory contents
         run: |
