@@ -1,7 +1,7 @@
 {
-  "name": "srp-tebex-docs",
-  "version": "1.0.1",
-  "description": "",
+  "name": "srp-scripts-docs",
+  "version": "1.0.0",
+  "description": "The documenation docs for SRP Gaming Scripts.",
   "homepage": "https://github.com/SpringbankRoleplay/srp-tebex-docs#readme",
   "bugs": {
     "url": "https://github.com/SpringbankRoleplay/srp-tebex-docs/issues"
@@ -10,16 +10,20 @@
     "type": "git",
     "url": "git+https://github.com/SpringbankRoleplay/srp-tebex-docs.git"
   },
-  "license": "ISC",
-  "author": "SnepCnep",
+  "author": "snepcnep",
+  "type": "module",
   "scripts": {
     "dev": "next",
-    "devturbo": "next --turbopack",
-    "serv": "serve out",
     "build": "next build",
-    "postbuild": "touch out/.nojekyll && pagefind --site out"
+    "start": "next start",
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.1.0",
+    "@fortawesome/free-brands-svg-icons": "^7.1.0",
+    "@fortawesome/free-regular-svg-icons": "^7.1.0",
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
+    "@fortawesome/react-fontawesome": "^3.2.0",
     "@tailwindcss/postcss": "^4.1.18",
     "next": "^16.1.6",
     "nextra": "^4.6.1",
@@ -31,7 +35,6 @@
   },
   "devDependencies": {
     "@types/node": "25.2.1",
-    "@types/react": "19.2.13",
-    "pagefind": "^1.4.0"
+    "@types/react": "^19.2.13"
   }
 }
