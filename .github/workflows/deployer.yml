@@ -3,6 +3,16 @@ name: Deployer
 on:
   push:
     branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -14,10 +24,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies with NPM
         run: npm install
@@ -30,19 +41,6 @@ jobs:
 
       - name: Run Pagefind
         run: npm run pagefind
-
-      - name: List output directory contents
-        run: |
-          echo "Contents of out directory:"
-          ls -la out/
-          echo "Checking for index.html:"
-          if [ -f "out/index.html" ]; then
-            echo "✅ index.html found!"
-            head -n 20 out/index.html
-          else
-            echo "❌ index.html NOT found!"
-            exit 1
-          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
