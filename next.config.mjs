@@ -10,6 +10,7 @@ const withNextra = nextra({
 const nextConfig = withNextra({
     output: 'export',
     skipTrailingSlashRedirect: true,
+    trailingSlash: true,
     images: {
         unoptimized: true,
     },
