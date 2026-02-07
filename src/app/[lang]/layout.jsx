@@ -30,7 +30,7 @@ const navbar = (
     // ... Your additional navbar options 
   />
 )
-const footer = <Footer>{new Date().getFullYear("nl-NL")} © Springbank.</Footer>
+const footer = <Footer>{new Date().toLocaleDateString('en-US', { year: 'numeric' })} © Springbank.</Footer>
  
 export default async function RootLayout({ children, params }) {
   let { lang } = await params
