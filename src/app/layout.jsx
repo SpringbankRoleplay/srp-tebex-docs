@@ -31,22 +31,18 @@ const navbar = (
   />
 )
 
-// const footer = <Footer>{new Date().getFullYear("nl-NL")} © Springbank.</Footer>
+const footer = <Footer>{new Date().getFullYear()} © Springbank.</Footer>
  
 export default async function RootLayout({ children, params }) {
   let { lang } = await params
   if (!lang) lang = 'en'
 
   const pageMap = await getPageMap(`/${lang}`)
-  const localeMap = {
-    en: 'en-US',
-    nl: 'nl-NL'
-  }
 
   return (
     <html
       // Not required, but good for SEO
-      lang={localeMap[lang] || 'en-US'}
+      lang={lang}
       // Required to be set
       dir="ltr"
       // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
@@ -63,7 +59,8 @@ export default async function RootLayout({ children, params }) {
           navbar={navbar}
           pageMap={pageMap}
           docsRepositoryBase="https://github.com/SpringbankRoleplay/srp-tebex-docs/tree/main"
-          // footer={footer}
+          
+          footer={footer}
           i18n={[
             { locale: 'en', name: 'English' },
             { locale: 'nl', name: 'Nederlands' }
