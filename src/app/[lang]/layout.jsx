@@ -35,12 +35,17 @@ const footer = <Footer>{new Date().getFullYear()} © Springbank.</Footer>
 export default async function RootLayout({ children, params }) {
   let { lang } = await params
   if (!lang) lang = 'en'
+
   const pageMap = await getPageMap(`/${lang}`)
+  const localeMap = {
+    en: 'en-US',
+    nl: 'nl-NL'
+  }
 
   return (
     <html
       // Not required, but good for SEO
-      lang={lang || 'en'}
+      lang={localeMap[lang] || 'en-US'}
       // Required to be set
       dir="ltr"
       // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
@@ -54,14 +59,10 @@ export default async function RootLayout({ children, params }) {
       <body>
         <Layout
           banner={banner}
-          toc={{
-            float: true,
-          }}
           navbar={navbar}
           pageMap={pageMap}
           docsRepositoryBase="https://github.com/SpringbankRoleplay/srp-tebex-docs/tree/main"
           footer={footer}
-          // ... Your additional layout options
           i18n={[
             { locale: 'en', name: 'English' },
             { locale: 'nl', name: 'Nederlands' }
