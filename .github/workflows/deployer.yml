@@ -39,8 +39,8 @@ jobs:
       - name: Copy CNAME to output directory
         run: cp CNAME out/CNAME
 
-      # - name: Run Pagefind
-      #   run: npm run postbuild
+      - name: postbuild
+        run: npm run postbuild
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
