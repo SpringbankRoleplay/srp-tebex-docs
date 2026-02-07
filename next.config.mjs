@@ -11,7 +11,7 @@ const nextConfig = withNextra({
     output: 'export',
     skipTrailingSlashRedirect: true,
     images: {
-        unoptimized: false,
+        unoptimized: true,
     },
     i18n: {
         locales: ['en', 'nl'],
