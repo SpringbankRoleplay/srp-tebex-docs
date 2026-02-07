@@ -1,7 +1,8 @@
 import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import { Banner, Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
-import 'nextra-theme-docs/style.css'
+import './global.css'
+import Image from 'next/image'
  
 export const metadata = {
     title: 'SRP Scripts Documentation',
@@ -11,13 +12,22 @@ export const metadata = {
     },
 }
  
-const banner = <Banner storageKey="springbank-scripts-beta">Springbank - Scripts | Beta🎉</Banner>
+const banner = <Banner storageKey="springbank-scripts-betarelease">Springbank - Scripts | Beta Release🎉</Banner>
 const navbar = (
   <Navbar
-    logo={<b>Springbank</b>}
+    logo={
+      <span className="flex items-center gap-2">
+        <Image src="https://wetboek.srp-fivem.nl/img/logo.png" alt="Logo" width={45} height={45} />
+        <h1 className="text-xl font-bold">
+          SRP Scripts
+        </h1>
+      </span>
+    }
+    logoLink="/en"
     chatLink="https://discord.gg/5H6kG8XAur"
     projectLink='https://github.com/SpringbankRoleplay/srp-tebex-docs'
-    // ... Your additional navbar options
+    
+    // ... Your additional navbar options 
   />
 )
 const footer = <Footer>{new Date().getFullYear()} © Springbank.</Footer>
@@ -43,14 +53,14 @@ export default async function RootLayout({ children, params }) {
       </Head>
       <body>
         <Layout
-           banner={banner}
+          banner={banner}
           toc={{
             float: true,
             title: lang === 'nl' ? 'Op deze pagina' : 'On this page'
           }}
           navbar={navbar}
           pageMap={pageMap}
-          docsRepositoryBase="https://github.com/springbank/"
+          docsRepositoryBase="https://github.com/SpringbankRoleplay/srp-tebex-docs/tree/main"
           footer={footer}
           // ... Your additional layout options
           i18n={[
