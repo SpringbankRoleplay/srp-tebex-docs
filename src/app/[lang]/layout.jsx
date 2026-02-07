@@ -40,7 +40,7 @@ export default async function RootLayout({ children, params }) {
   return (
     <html
       // Not required, but good for SEO
-      lang={lang}
+      lang={lang || 'en'}
       // Required to be set
       dir="ltr"
       // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
@@ -56,7 +56,6 @@ export default async function RootLayout({ children, params }) {
           banner={banner}
           toc={{
             float: true,
-            title: lang === 'nl' ? 'Op deze pagina' : 'On this page'
           }}
           navbar={navbar}
           pageMap={pageMap}
