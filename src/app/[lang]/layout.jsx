@@ -11,12 +11,12 @@ export const metadata = {
     },
 }
  
-// const banner = <Banner storageKey="some-key">Nextra 4.0 is released 🎉</Banner>
+const banner = <Banner storageKey="springbank-scripts-beta">Springbank - Scripts | Beta🎉</Banner>
 const navbar = (
   <Navbar
     logo={<b>Springbank</b>}
-    chatLink="https://discord.gg/RthP4fvj8t"
-    projectLink='https://github.com/springbank/'
+    chatLink="https://discord.gg/5H6kG8XAur"
+    projectLink='https://github.com/SpringbankRoleplay/srp-tebex-docs'
     // ... Your additional navbar options
   />
 )
@@ -43,10 +43,10 @@ export default async function RootLayout({ children, params }) {
       </Head>
       <body>
         <Layout
-          // banner={banner}
+           banner={banner}
           toc={{
             float: true,
-            title: lang === 'en' ? 'On this page' : 'Op deze pagina'
+            title: lang === 'nl' ? 'Op deze pagina' : 'On this page'
           }}
           navbar={navbar}
           pageMap={pageMap}
