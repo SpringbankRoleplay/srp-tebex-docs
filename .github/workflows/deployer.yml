@@ -62,7 +62,7 @@ jobs:
       - name: Run Pagefind
         run: npx pagefind --site out
 
-      - name: Create root index.html redirect
+      - name: Create root index.html redirect #// beetje iligaal maar goed genoeg voor nu. (niet aankomen!!!)
         run: |
           cat > out/index.html << 'EOF'
           <!DOCTYPE html>
