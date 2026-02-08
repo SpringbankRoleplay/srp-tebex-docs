@@ -14,20 +14,22 @@ import { faStore } from '@fortawesome/free-solid-svg-icons'
 
 export const metadata = {
   // Define your metadata here
-  // For more information on metadata API, see: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
-  title: "SRP Gaming - Documentatie",
-  description: "Officiële documentatie van SRP Gaming Scripts",
+  // For more information on the Metadata API, see:
+  // https://nextjs.org/docs/app/building-your-application/optimizing/metadata
+
+  title: "SRP Gaming - Documentation",
+  description: "Official documentation for SRP Gaming scripts",
 
   metadataBase: new URL("https://balhari.srp-fivem.nl"),
 
   openGraph: {
     type: "website",
-    url: "https://balhari.srp-fivem.nl/",
-    title: "SRP Gaming - Documentatie",
-    description: "Officiële documentatie van SRP Gaming Scripts",
+    url: "https://balhari.srp-fivem.nl",
+    title: "SRP Gaming - Documentation",
+    description: "Official documentation for SRP Gaming scripts",
     images: [
       {
-        url: "./logo.png",
+        url: "/logo.png",
         width: 1200,
         height: 630,
         alt: "SRP Gaming Docs",
@@ -37,9 +39,9 @@ export const metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "SRP Gaming - Docs",
-    description: "Officiële documentatie van SRP Gaming Scripts",
-    images: ["./logo.png"],
+    title: "SRP Gaming - Documentation",
+    description: "Official documentation for SRP Gaming scripts",
+    images: ["https://balhari.srp-fivem.nl/logo.png"],
   },
 };
 
