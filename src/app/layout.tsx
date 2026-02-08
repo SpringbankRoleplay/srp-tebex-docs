@@ -15,7 +15,33 @@ import { faStore } from '@fortawesome/free-solid-svg-icons'
 export const metadata = {
   // Define your metadata here
   // For more information on metadata API, see: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
-}
+  title: "SRP Gaming - Documentatie",
+  description: "Officiële documentatie van SRP Gaming Scripts",
+
+  metadataBase: new URL("https://balhari.srp-fivem.nl"),
+
+  openGraph: {
+    type: "website",
+    url: "https://balhari.srp-fivem.nl/",
+    title: "SRP Gaming - Documentatie",
+    description: "Officiële documentatie van SRP Gaming Scripts",
+    images: [
+      {
+        url: "./logo.png",
+        width: 1200,
+        height: 630,
+        alt: "SRP Gaming Docs",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "SRP Gaming - Docs",
+    description: "Officiële documentatie van SRP Gaming Scripts",
+    images: ["./logo.png"],
+  },
+};
 
 const banner = (
   <Banner
@@ -41,7 +67,11 @@ const navbar = (
     projectLink='https://github.com/SpringbankRoleplay/srp-tebex-docs'
     children={
       <span className="hidden md:flex items-center gap-2">
-        <Link href="/roleplay" passHref>
+        <Link
+          href="https://www.srp-scripts.nl"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <FontAwesomeIcon icon={faStore} className="w-6 h-6" />
         </Link>
       </span>
@@ -50,6 +80,8 @@ const navbar = (
 )
 
 const footer = <Footer>{new Date().getFullYear()} © SRP Gaming.</Footer>
+
+
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -73,7 +105,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           pageMap={await getPageMap()}
           docsRepositoryBase="https://github.com/SpringbankRoleplay/srp-tebex-docs/tree/main"
           footer={footer}
-          // ... Your additional layout options
+        // ... Your additional layout options
         >
           {children}
         </Layout>
