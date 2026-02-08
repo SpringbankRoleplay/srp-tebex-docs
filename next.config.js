@@ -18,5 +18,4 @@ export default withNextra({
             'next-mdx-import-source-file': './src/mdx-components.tsx'
         }
     },
-    defaultShowCopyCode: false,
 })
