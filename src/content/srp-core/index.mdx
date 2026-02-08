@@ -1,1 +1,132 @@
 # SRP-Core
+
+
+import { Callout } from "@/components/Callout"
+import { Card, CardGrid } from "@/components/Card"
+import { Steps, Step } from "@/components/Steps"
+import { Badge } from "@/components/Badge"
+import { Section } from "@/components/Section"
+
+/* -------------------------------------------------------------------------- */
+/*                                   Header                                   */
+/* -------------------------------------------------------------------------- */
+
+# Components
+
+A full overview of all reusable UI components available in the SRP Gaming Docs.
+
+<Callout title="Tip">
+Use this page as a reference when writing documentation pages.
+</Callout>
+
+/* -------------------------------------------------------------------------- */
+/*                                  Callouts                                  */
+/* -------------------------------------------------------------------------- */
+
+<Section
+  title="Callouts"
+  description="Use callouts to highlight important information."
+>
+  <Callout type="info" title="Info">
+    This is an informational callout.
+  </Callout>
+
+  <Callout type="success" title="Success">
+    The operation completed successfully.
+  </Callout>
+
+  <Callout type="warning" title="Warning">
+    This feature requires special permissions.
+  </Callout>
+
+  <Callout type="error" title="Error">
+    Something went wrong.
+  </Callout>
+</Section>
+
+/* -------------------------------------------------------------------------- */
+/*                                   Badges                                   */
+/* -------------------------------------------------------------------------- */
+
+<Section
+  title="Badges"
+  description="Badges are useful for marking feature status."
+>
+  <div className="flex flex-wrap gap-2">
+    <Badge>Default</Badge>
+    <Badge variant="new">NEW</Badge>
+    <Badge variant="beta">BETA</Badge>
+    <Badge variant="deprecated">DEPRECATED</Badge>
+  </div>
+</Section>
+
+/* -------------------------------------------------------------------------- */
+/*                                    Cards                                   */
+/* -------------------------------------------------------------------------- */
+
+<Section
+  title="Cards"
+  description="Cards are ideal for navigation and overview pages."
+>
+  <CardGrid>
+    <Card
+      title="Getting Started"
+      description="Learn how to install and configure SRP."
+      href="/docs/getting-started"
+    />
+    <Card
+      title="API Reference"
+      description="All server & client exports."
+      href="/docs/api"
+    />
+    <Card
+      title="Permissions"
+      description="Understand roles and access levels."
+    />
+  </CardGrid>
+</Section>
+
+/* -------------------------------------------------------------------------- */
+/*                                    Steps                                   */
+/* -------------------------------------------------------------------------- */
+
+<Section
+  title="Steps"
+  description="Steps are perfect for tutorials and guides."
+>
+  <Steps>
+    <Step title="Install the resource">
+      Place the resource inside the <code>/resources</code> folder.
+    </Step>
+
+    <Step title="Configure server.cfg">
+      Add <code>ensure srp-core</code> to your config.
+    </Step>
+
+    <Step title="Restart server">
+      Restart your FiveM server to apply changes.
+    </Step>
+  </Steps>
+</Section>
+
+/* -------------------------------------------------------------------------- */
+/*                               Combined Example                              */
+/* -------------------------------------------------------------------------- */
+
+<Section
+  title="Combined Example"
+  description="Components can be freely combined."
+>
+  <Callout type="warning" title="Beta Feature">
+    This feature is currently in <Badge variant="beta">BETA</Badge>
+  </Callout>
+
+  <Steps>
+    <Step title="Enable feature">
+      Set <code>experimental = true</code> in the config.
+    </Step>
+    <Step title="Restart server">
+      Changes take effect after restart.
+    </Step>
+  </Steps>
+</Section>
