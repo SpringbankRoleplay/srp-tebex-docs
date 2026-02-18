@@ -20,11 +20,11 @@ export const metadata = {
   title: "SRP Gaming - Documentation",
   description: "Official documentation for SRP Gaming scripts",
 
-  metadataBase: new URL("https://balhari.srp-fivem.nl"),
+  metadataBase: new URL("https://docs.srp-scripts.com"),
 
   openGraph: {
     type: "website",
-    url: "https://balhari.srp-fivem.nl",
+    url: "https://docs.srp-scripts.com",
     title: "SRP Gaming - Documentation",
     description: "Official documentation for SRP Gaming scripts",
     images: [
@@ -41,7 +41,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "SRP Gaming - Documentation",
     description: "Official documentation for SRP Gaming scripts",
-    images: ["https://balhari.srp-fivem.nl/logo.png"],
+    images: ["https://docs.srp-scripts.com/logo.png"],
   },
 };
 
@@ -70,7 +70,7 @@ const navbar = (
     children={
       <span className="hidden md:flex items-center gap-2">
         <Link
-          href="https://www.srp-scripts.nl"
+          href="https://www.srp-scripts.com"
           target="_blank"
           rel="noopener noreferrer"
         >
